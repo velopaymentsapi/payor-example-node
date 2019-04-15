@@ -31,4 +31,4 @@ To test the example api import the following Postman collection & environment fi
 
 Make sure to edit the environment file variables with any need values.
 
-All calls are dependant on calling Public > Authenticate ... in order to get a JWT. This needs to occur once for an auth token to the lumen api.
+All calls are dependant on calling Public > Authenticate ... in order to get a JWT. This needs to occur once for an auth token to the express api.
