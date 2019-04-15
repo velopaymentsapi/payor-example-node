@@ -1,12 +1,12 @@
 {
-    "name": "open-gen",
+    "name": "payor-example-node",
     "version": "0.0.1",
-    "description": "velo sample nodejs application",
+    "description": "Velo Payor Example.",
     "repository": {
         "type": "git",
         "url": ""
     },
-    "license": "UNLICENSED",
+    "license": "Apache License 2.0",
     "main": "app.js",
     "scripts": {
         "start": "node app.js"
