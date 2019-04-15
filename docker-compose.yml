@@ -1,0 +1,33 @@
+version: "3.4"
+
+services:
+
+  api:
+    container_name: payor-example-node
+    build: .
+    command: sh
+    ports:
+      - "4567:4567"
+    volumes:
+      - ./src:/opt/payor-example-node
+    depends_on:
+      - db
+    networks:
+      - payornode
+
+  db:
+    image: postgres:9.6
+    container_name: db
+    environment:
+      - POSTGRES_USER=payor
+      - POSTGRES_PASSWORD=payor
+    networks:
+      - payornode
+    ports:
+      - "5432:5432"
+    volumes:
+        - ./pgsql:/docker-entrypoint-initdb.d
+
+networks:
+  payornode:
+    external: true
