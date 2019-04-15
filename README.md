@@ -1,32 +1,34 @@
+# Velo Payor Example - Node.js
 
-https://velopaymentsapi.github.io/VeloOpenApi/branch/v2.11/openapi.json
+This is a simplified example of an API for a payor that integrates with Velo Payments. This example uses the [express](http://expressjs.com/) framework.
 
+### Usage
 
-docker build -t oasconverter .
-docker run -v /Users/bhalle/velo/open-gen/spec:/tmp -e OPENAPI_FILE=openapi.json open > swagger-codegen/out/spec/swagger_2.json
+Copy the `.env.example` file within the `src` directory and create new file `src/.env` with its contents.
 
+You will need to replace the following variables with the information you recieved from Velo.
 
+```
+VELO_API_APIKEY=contact_velo_for_info
+VELO_API_APISECRET=contact_velo_for_info
+VELO_API_PAYORID=contact_velo_for_info
+```
 
-git clone https://github.com/swagger-api/swagger-codegen
-cd swagger-codegen
-./run-in-docker.sh mvn package
+First time spinning up the api ... we will need to create the network 
 
+```
+docker network create payornode
+```
 
-./run-in-docker.sh help # Executes 'help' command for swagger-codegen-cli
-./run-in-docker.sh langs # Executes 'langs' command for swagger-codegen-cli
+To spin up the api & database ... 
+```
+make up
+```
 
-./run-in-docker.sh generate -i out/spec/swagger_2.json -l javascript -o /gen/out/velo-node -DpackageName=velo
+To test the example api import the following Postman collection & environment files via
 
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/86c785f2ee6edbfc1751#?env%5BVelo%20Payor%20Example%20Dev%5D=W3sia2V5IjoiYXBpX3VybCIsInZhbHVlIjoiaHR0cDovL2xvY2FsaG9zdDo0NTY3IiwiZGVzY3JpcHRpb24iOiIiLCJlbmFibGVkIjp0cnVlfSx7ImtleSI6Imp3dF90b2tlbiIsInZhbHVlIjoiIiwiZGVzY3JpcHRpb24iOiIiLCJlbmFibGVkIjp0cnVlfSx7ImtleSI6InBheWVlX2lkIiwidmFsdWUiOiIiLCJkZXNjcmlwdGlvbiI6IiIsImVuYWJsZWQiOnRydWV9LHsia2V5IjoicGF5bWVudF9pZCIsInZhbHVlIjoiIiwiZGVzY3JpcHRpb24iOiIiLCJlbmFibGVkIjp0cnVlfSx7ImtleSI6InNvdXJjZV9hY2NvdW50X2lkIiwidmFsdWUiOiIiLCJkZXNjcmlwdGlvbiI6IiIsImVuYWJsZWQiOnRydWV9LHsia2V5Ijoic291cmNlX2FjY291bnRfbmFtZSIsInZhbHVlIjoiIiwiZGVzY3JpcHRpb24iOiIiLCJ0eXBlIjoidGV4dCIsImVuYWJsZWQiOnRydWV9XQ==)
 
+Make sure to edit the environment file variables with any need values.
 
-
-
-
-
-
-
-
-
-
-
-docker-compose up --build  
+All calls are dependant on calling Public > Authenticate ... in order to get a JWT. This needs to occur once for an auth token to the lumen api.
