@@ -4,7 +4,7 @@ This is a simplified example of an API for a payor that integrates with Velo Pay
 
 ### Usage
 
-Copy the `.env.example` file within the `src` directory and create new file `src/.env` with its contents.
+Copy the `.env.example` file and create new file `src/.env` with its contents.
 
 You will need to replace the following variables with the information you recieved from Velo.
 
