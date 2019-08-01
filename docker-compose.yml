@@ -5,7 +5,18 @@ services:
   api:
     container_name: payor-example-node
     build: .
-    command: npm run start # sh
+    command: npm run start
+    ports:
+      - "4567:4567"
+    depends_on:
+      - db
+    networks:
+      - payornode
+
+  dev:
+    container_name: payor-example-node
+    build: .
+    command: sh
     ports:
       - "4567:4567"
     volumes:
