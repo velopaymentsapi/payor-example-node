@@ -1,7 +1,6 @@
 //
 require('custom-env').env();
 const express = require("express");
-const createError = require('http-errors');
 const logger = require('morgan');
 const helmet = require('helmet');
 const cron = require('node-cron');
@@ -10,13 +9,13 @@ const velo = require('./velo');
 require('./local-strategy');
 
 //
-var indexRouter = require('./routes/index');
-var authRouter = require('./routes/auth');
-var userRouter = require('./routes/user');
-var settingsRouter = require('./routes/settings');
-var payeesRouter = require('./routes/payees');
-var paymentsRouter = require('./routes/payments');
-var reportingRouter = require('./routes/reporting');
+var indexRouter = require('./controllers/index');
+var authRouter = require('./controllers/auth');
+var userRouter = require('./controllers/user');
+var settingsRouter = require('./controllers/settings');
+var payeesRouter = require('./controllers/payees');
+var paymentsRouter = require('./controllers/payments');
+var reportingRouter = require('./controllers/reporting');
 
 //
 var app = express();
@@ -34,10 +33,11 @@ app.use('/payments', passport.authenticate('jwt', {session: false}), paymentsRou
 app.use('/reporting', passport.authenticate('jwt', {session: false}), reportingRouter);
 
 app.use(function(req, res, next) {
-  next(createError(404));
+  return res.status(404).json();
 });
 app.use(function(err, req, res, next) {
-  next(createError(500));
+  console.log('ERROR:', err);
+  return res.status(500).json();
 });
 
 //

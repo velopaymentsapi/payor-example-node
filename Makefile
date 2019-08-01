@@ -1,13 +1,16 @@
 db:
 	docker-compose up -d db
 
+env:
+	cp src/.env-example src/.env
+
 network:
-	docker network create payornode
+	- docker network create payornode
 
 build:
 	docker-compose build --no-cache api
 
-up:
+up: clean network
 	docker-compose run --service-ports api
 
 sh:
@@ -17,9 +20,8 @@ down:
 	docker-compose down
 
 clean:
-	docker rm /payor-example-node
+	- docker rm /payor-example-node
+	- docker rm /db
 
 destroy:
-	docker rmi -f payor-example-node_api
-	docker rmi -f payor-example-node_db
-	docker rmi -f payor-example-node_velo
+	- docker rmi -f payor-example-node_api

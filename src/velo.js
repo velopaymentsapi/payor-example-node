@@ -22,7 +22,7 @@ class Velo {
                 return console.error('Velo OAuth Grant failed:', err);
             }
             const info = JSON.parse(body);
-            console.log('Velo OAuth Grant successful!  Server responded with:', info.access_token, info.expires_in);
+            console.log('Velo OAuth Grant successful!'); //  Server responded with:', info.access_token, info.expires_in);
 
             this.setAccessTokenAndExpiration(info.access_token, info.expires_in);
         });

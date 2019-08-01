@@ -16,7 +16,12 @@ router.post("/login", function(req, res, next) {
       if (err) {
         res.send(err);
       }
-      const token = jwt.sign(user, process.env.JWT_SECRET);
+      const options = {
+        subject: user.api_key, 
+        issuer: 'payor-example', 
+        expiresIn: '4h'
+      };
+      const token = jwt.sign({}, process.env.JWT_SECRET, options);
       return res.json({ token });
     });
   })(req, res);

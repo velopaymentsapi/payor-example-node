@@ -1,6 +1,6 @@
 # Velo Payor Example - Node.js
 
-This is a simplified example of an API for a payor that integrates with Velo Payments. This example uses the [express](http://expressjs.com/) framework.
+This is a simplified example of an API for a payor that integrates with Velo Payments. This example uses the [express](http://expressjs.com/) framework. It also uses the Velo Javascript client: [velo-node](https://github.com/velopaymentsapi/velo-node)
 
 ### Usage
 
@@ -17,7 +17,7 @@ VELO_API_PAYORID=contact_velo_for_info
 First time spinning up the api ... we will need to create the network 
 
 ```
-docker network create payornode
+make network
 ```
 
 To spin up the api & database ... 

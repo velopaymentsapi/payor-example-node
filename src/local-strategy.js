@@ -17,7 +17,7 @@ passport.use(
         .one("SELECT * FROM users WHERE username = $1", [username])
         .then(function(user) {
           if (!user) {
-            return cb({ message: "Incorrect email or password." }, false);
+            return cb({ message: "Incorrect email or password" }, false);
           }
           if (bcrypt.compareSync(password, user.password)) {
             return cb(null, user);
@@ -25,7 +25,7 @@ passport.use(
           return cb({ message: "Incorrect email or password." }, false);
         })
         .catch(function(error) {
-          return cb({ message: "Incorrect email or password." }, false);
+          return cb({ message: "Incorrect email or password.." }, false);
         });
     }
   )
@@ -39,7 +39,7 @@ passport.use(
     },
     function(jwtPayload, cb) {
       return db
-        .one("SELECT * FROM users WHERE key = $1", [jwtPayload.key], (user) => {
+        .one("SELECT * FROM users WHERE api_key = $1", [jwtPayload.sub], (user) => {
           return {key: user.key};
         })
         .then(function(user) {
