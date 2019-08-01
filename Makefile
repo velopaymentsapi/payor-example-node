@@ -2,7 +2,7 @@ db:
 	docker-compose up -d db
 
 env:
-	cp src/.env-example src/.env
+	cp src/.env.example src/.env
 
 network:
 	- docker network create payornode
