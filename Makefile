@@ -12,7 +12,7 @@ endif
 	- mv .env src/.env
 
 network:
-	- docker network create payornode
+	- docker network create payorexample
 
 build:
 	docker-compose build --no-cache api
@@ -32,3 +32,7 @@ clean:
 
 destroy:
 	- docker rmi -f payor-example-node_api
+
+setdep:
+	# make version=2.16.18 setdep
+	sed -i.bak 's/"velo-payments": ".*"/"velo-payments": "${version}"/g' src/package.json && rm src/package.json.bak

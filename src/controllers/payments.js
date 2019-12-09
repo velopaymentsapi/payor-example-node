@@ -5,10 +5,10 @@ const VeloPayments = require('velo-payments');
 const velo = require('../velo');
 
 /* POST payment create. */
-router.post('/', function(req, res, next) {
+router.post('/', async function(req, res, next) {
   let defaultClient = VeloPayments.ApiClient.instance;
   let OAuth2 = defaultClient.authentications['OAuth2'];
-  OAuth2.accessToken = velo.getAccessToken();
+  OAuth2.accessToken = await velo.getAccessToken();
 
   let apiInstance = new VeloPayments.SubmitPayoutApi();
   let createPayoutRequest = new VeloPayments.CreatePayoutRequest();
@@ -37,10 +37,10 @@ router.post('/', function(req, res, next) {
 });
 
 /* PUT payment instruct/confirm. */
-router.put('/:payment_id', function(req, res, next) {
+router.put('/:payment_id', async function(req, res, next) {
   let defaultClient = VeloPayments.ApiClient.instance;
   let OAuth2 = defaultClient.authentications['OAuth2'];
-  OAuth2.accessToken = velo.getAccessToken();
+  OAuth2.accessToken = await velo.getAccessToken();
 
   let apiInstance = new VeloPayments.InstructPayoutApi();
   let payoutId = req.params.payment_id;
@@ -55,10 +55,10 @@ router.put('/:payment_id', function(req, res, next) {
 });
 
 /* DELETE payment cancel. */
-router.delete('/:payment_id', function(req, res, next) {
+router.delete('/:payment_id', async function(req, res, next) {
   let defaultClient = VeloPayments.ApiClient.instance;
   let OAuth2 = defaultClient.authentications['OAuth2'];
-  OAuth2.accessToken = velo.getAccessToken();
+  OAuth2.accessToken = await velo.getAccessToken();
 
   let apiInstance = new VeloPayments.WithdrawPayoutApi();
   let payoutId = req.params.payment_id;
@@ -73,10 +73,10 @@ router.delete('/:payment_id', function(req, res, next) {
 });
 
 /* GET payments details. */
-router.get('/:payment_id', function(req, res, next) {
+router.get('/:payment_id', async function(req, res, next) {
   let defaultClient = VeloPayments.ApiClient.instance;
   let OAuth2 = defaultClient.authentications['OAuth2'];
-  OAuth2.accessToken = velo.getAccessToken();
+  OAuth2.accessToken = await velo.getAccessToken();
 
   let apiInstance = new VeloPaymentsApIs.GetPayoutApi();
   let payoutId = req.params.payment_id;

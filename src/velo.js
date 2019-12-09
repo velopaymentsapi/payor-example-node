@@ -1,12 +1,21 @@
 const request = require('request');
 const moment = require('moment-timezone');
+const redis = require("redis");
+const bluebird = require("bluebird");
+bluebird.promisifyAll(redis.RedisClient.prototype);
+bluebird.promisifyAll(redis.Multi.prototype);
 
 // this just runs in background and refreshes oauth2 access token for the client
 class Velo {
     constructor(){
-        console.log("calling velo oauth client cred grant to get access token");
         this.refreshBefore = 300; // 5 mins
-        this.requestAccessToken();
+        if (!process.env.SYNC_SIDECAR) {
+            console.log('sync sidecar disabled ... oauth managed locally');
+            console.log("calling velo oauth client cred grant to get access token");
+            this.requestAccessToken();
+        } else {
+            console.log('sync sidecar enabled ... oauth not managed locally');
+        }
     }
     requestAccessToken(){
         console.log("updating velo access token (use redis if multiple instances)");
@@ -28,9 +37,11 @@ class Velo {
         });
     }
     checkAccessTokenExpiration(){
-        console.log("check if access token is going to expire soon ... if so ... grab new one");
-        if(moment().unix() >= this.getAccessTokenExpiration()) {
-            this.requestAccessToken()
+        if (!process.env.SYNC_SIDECAR) {
+            console.log("check if access token is going to expire soon ... if so ... grab new one");
+            if(moment().unix() >= this.getAccessTokenExpiration()) {
+                this.requestAccessToken()
+            }
         }
     }
     setAccessTokenAndExpiration(t, ttl) {
@@ -38,8 +49,13 @@ class Velo {
         process.env.VELO_API_ACCESSTOKEN = t;
         process.env.VELO_API_ACCESSTOKENEXPIRATION = ((moment().unix() + ttl) - this.refreshBefore);
     }
-    getAccessToken() {
-        return process.env.VELO_API_ACCESSTOKEN;
+    async getAccessToken() {
+        if (!process.env.SYNC_SIDECAR) {
+            return process.env.VELO_API_ACCESSTOKEN;
+        } else {
+            let client = redis.createClient("redis://redis:6379", {detect_buffers: true});
+            return await client.getAsync('VELO_API_ACCESSTOKEN');
+        }
     }
     getAccessTokenExpiration() {
         return parseInt(process.env.VELO_API_ACCESSTOKENEXPIRATION,10);

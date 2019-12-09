@@ -37,7 +37,7 @@ class Payee {
         this.instance = {};
         // populate instance
         this.fields.forEach(function(item, index, array) {
-            if (item in i) {
+            if (i !== undefined && item in i) {
                 this.instance[item] = i[item];
             } else {
                 this.instance[item] = null;
@@ -97,12 +97,24 @@ class Payee {
             res.status(200)
                 .json({
                 status: 'success',
-                message: 'Inserted one puppy'
+                message: 'Inserted'
                 });
         })
         .catch(function (err) {
             return next(err);
         });
+    }
+    list(page, size) {
+        let limit = (size === undefined) ? 50 : size ;
+        let offset = (page === 1) ? 0 : ((page-1) * limit);
+        return db.any('SELECT * FROM payees ORDER BY created_at LIMIT $1 OFFSET $2', [limit, offset])
+            .then(data => {
+                // console.log('DATA:', data); // print data;
+                return data;
+            })
+            .catch(error => {
+                console.log('ERROR:', error); // print the error;
+            });
     }
 }
 
