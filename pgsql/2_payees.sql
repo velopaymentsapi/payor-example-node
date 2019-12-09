@@ -1,5 +1,5 @@
 CREATE TABLE payees (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  id varchar(100) PRIMARY KEY DEFAULT gen_random_uuid(),
   email varchar(255) NOT NULL,
   first_name varchar(255) NOT NULL,
   last_name varchar(255) NOT NULL,
@@ -12,7 +12,7 @@ CREATE TABLE payees (
   phone_number varchar(255) NOT NULL,
   date_of_birth date DEFAULT NULL, -- using caution .. month date only
   national_id varchar(255) DEFAULT NULL, -- using caution .. last 4
-  bank_name varchar(255) NOT NULL,
+  bank_name varchar(255) DEFAULT NULL,
   routing_number varchar(255) DEFAULT NULL,
   account_number varchar(255) DEFAULT NULL, -- using caution .. last 4
   iban varchar(255) DEFAULT NULL, -- using caution .. last 4

@@ -4,10 +4,10 @@ const velo = require('../velo');
 const router = express.Router();
 
 /* GET payor velo info. */
-router.get('/', function(req, res, next) {
+router.get('/', async function(req, res, next) {
   let defaultClient = VeloPayments.ApiClient.instance;
   let OAuth2 = defaultClient.authentications['OAuth2'];
-  OAuth2.accessToken = velo.getAccessToken();
+  OAuth2.accessToken = await velo.getAccessToken();
 
   let apiInstance = new VeloPayments.PayorsApi();
   let payorId = process.env.VELO_API_PAYORID;
@@ -22,10 +22,10 @@ router.get('/', function(req, res, next) {
 });
 
 /* GET payor velo accounts. */
-router.get('/accounts', function(req, res, next) {
+router.get('/accounts', async function(req, res, next) {
   let defaultClient = VeloPayments.ApiClient.instance;
   let OAuth2 = defaultClient.authentications['OAuth2'];
-  OAuth2.accessToken = velo.getAccessToken();
+  OAuth2.accessToken = await velo.getAccessToken();
 
   let apiInstance = new VeloPayments.FundingManagerApi();
   let opts = {'payorId': process.env.VELO_API_PAYORID};
@@ -39,10 +39,10 @@ router.get('/accounts', function(req, res, next) {
 });
 
 /* POST create funding request. */
-router.post('/fundings', function(req, res, next) {
+router.post('/fundings', async function(req, res, next) {
   let defaultClient = VeloPayments.ApiClient.instance;
   let OAuth2 = defaultClient.authentications['OAuth2'];
-  OAuth2.accessToken = velo.getAccessToken();
+  OAuth2.accessToken = await velo.getAccessToken();
   
   let apiInstance = new VeloPayments.FundingManagerApi();
   let sourceAccountId = req.body.source_account;
@@ -58,10 +58,10 @@ router.post('/fundings', function(req, res, next) {
 });
 
 /* GET list available countries on velo. */
-router.get('/countries', function(req, res, next) {
+router.get('/countries', async function(req, res, next) {
   let defaultClient = VeloPayments.ApiClient.instance;
   let OAuth2 = defaultClient.authentications['OAuth2'];
-  OAuth2.accessToken = velo.getAccessToken();
+  OAuth2.accessToken = await velo.getAccessToken();
   
   let apiInstance = new VeloPayments.CountriesApi();
   apiInstance.listSupportedCountries((error, data, response) => {
@@ -75,10 +75,10 @@ router.get('/countries', function(req, res, next) {
 });
 
 /* GET list available currencies on velo. */
-router.get('/currencies', function(req, res, next) {
+router.get('/currencies', async function(req, res, next) {
   let defaultClient = VeloPayments.ApiClient.instance;
   let OAuth2 = defaultClient.authentications['OAuth2'];
-  OAuth2.accessToken = velo.getAccessToken();
+  OAuth2.accessToken = await velo.getAccessToken();
 
   let apiInstance = new VeloPayments.CurrenciesApi();
   apiInstance.listSupportedCurrencies((error, data, response) => {

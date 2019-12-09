@@ -5,32 +5,36 @@ const router = express.Router();
 const payeeModel = require('../models/payee');
 
 /* GET payees list. */
-router.get('/', function(req, res, next) {
-  let defaultClient = VeloPayments.ApiClient.instance;
-  let OAuth2 = defaultClient.authentications['OAuth2'];
-  OAuth2.accessToken = velo.getAccessToken();
+router.get('/', async function(req, res, next) {
+  // let defaultClient = VeloPayments.ApiClient.instance;
+  // let OAuth2 = defaultClient.authentications['OAuth2'];
+  // OAuth2.accessToken = await velo.getAccessToken();
 
-  let apiInstance = new VeloPayments.PayeesApi();
-  let payorId = process.env.VELO_API_PAYORID;
-  let opts = {
-    'pageNumber': 1,
-    'pageSize': 100,
-    'sort': 'displayName:desc'
-  };
-  apiInstance.listPayees(payorId, opts, (error, data, response) => {
-    if (error) {
-      console.error(error);
-    } else {
-      res.json(response.body);
-    }
-  });
+  // let apiInstance = new VeloPayments.PayeesApi();
+  // let payorId = process.env.VELO_API_PAYORID;
+  // let opts = {
+  //   'pageNumber': 1,
+  //   'pageSize': 100,
+  //   'sort': 'displayName:desc'
+  // };
+  // apiInstance.listPayees(payorId, opts, (error, data, response) => {
+  //   if (error) {
+  //     console.error(error);
+  //   } else {
+  //     res.json(response.body);
+  //   }
+  // });
+  let page = (req.query.page !== undefined) ? parseInt(req.query.page): 1;
+  let model = new payeeModel();
+  let payees = await model.list(page);
+  res.json(payees);
 });
 
 /* POST create payees. */
-router.post('/', function(req, res, next) {
+router.post('/', async function(req, res, next) {
   let defaultClient = VeloPayments.ApiClient.instance;
   let OAuth2 = defaultClient.authentications['OAuth2'];
-  OAuth2.accessToken = velo.getAccessToken();
+  OAuth2.accessToken = await velo.getAccessToken();
   // create payee locally
   let model = new payeeModel(req.body);
   if (model.validateCreate() !== undefined) {
@@ -59,10 +63,10 @@ router.post('/', function(req, res, next) {
 });
 
 /* GET payees info. */
-router.get('/:payee_id', function(req, res, next) {
+router.get('/:payee_id', async function(req, res, next) {
   let defaultClient = VeloPayments.ApiClient.instance;
   let OAuth2 = defaultClient.authentications['OAuth2'];
-  OAuth2.accessToken = velo.getAccessToken();
+  OAuth2.accessToken = await velo.getAccessToken();
 
   let apiInstance = new VeloPayments.PayeesApi();
   let payeeId = req.params.payee_id;
@@ -80,10 +84,10 @@ router.get('/:payee_id', function(req, res, next) {
 });
 
 /* POST create remote payee onboarding. */
-router.post('/:payee_id/invite', function(req, res, next) {
+router.post('/:payee_id/invite', async function(req, res, next) {
   let defaultClient = VeloPayments.ApiClient.instance;
   let OAuth2 = defaultClient.authentications['OAuth2'];
-  OAuth2.accessToken = velo.getAccessToken();
+  OAuth2.accessToken = await velo.getAccessToken();
 
   let apiInstance = new VeloPayments.PayeeInvitationApi();
   let payeeId = req.params.payee_id;

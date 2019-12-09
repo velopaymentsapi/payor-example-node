@@ -6,6 +6,7 @@ const helmet = require('helmet');
 const cron = require('node-cron');
 const passport = require('passport');
 const velo = require('./velo');
+const cors = require('cors');
 require('./local-strategy');
 
 //
@@ -24,6 +25,11 @@ app.use(helmet())
 app.use(logger('dev'));
 app.use(express.json());
 
+app.use(cors({
+  origin: function(origin, callback){
+    return callback(null, true);
+  }
+}));
 app.use('/', indexRouter);
 app.use('/auth', authRouter);
 app.use('/user', passport.authenticate('jwt', {session: false}), userRouter);
@@ -42,7 +48,6 @@ app.use(function(err, req, res, next) {
 
 //
 cron.schedule('* * * * *', () => {
-  console.log('running a task every minute');
   velo.checkAccessTokenExpiration();
 });
 

@@ -1,4 +1,4 @@
-version: "3.4"
+version: "3.5"
 
 services:
 
@@ -10,8 +10,9 @@ services:
       - "4567:4567"
     depends_on:
       - db
+      - redis
     networks:
-      - payornode
+      - payornetwork
 
   dev:
     container_name: payor-example-node
@@ -23,8 +24,9 @@ services:
       - ./src:/opt/payor-example-node
     depends_on:
       - db
+      - redis
     networks:
-      - payornode
+      - payornetwork
 
   db:
     image: postgres:9.6
@@ -33,12 +35,20 @@ services:
       - POSTGRES_USER=payor
       - POSTGRES_PASSWORD=payor
     networks:
-      - payornode
+      - payornetwork
     ports:
       - "5432:5432"
     volumes:
         - ./pgsql:/docker-entrypoint-initdb.d
 
+  redis:
+    image: redis:alpine
+    ports:
+      - 6379:6379
+    container_name: redis
+    networks:
+      - payornetwork
+
 networks:
-  payornode:
-    external: true
+  payornetwork:
+    name: external_payornetwork
