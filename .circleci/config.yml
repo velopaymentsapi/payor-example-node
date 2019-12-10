@@ -4,46 +4,46 @@ jobs:
     docker:
       image: circleci/node:latest
     steps:
-      - run: 
+      - run:
           name: Verify VELO_CLIENT_VERSION
-          command: | 
+          command: |
             if [ "$VELO_CLIENT_VERSION" = "" ]; then
                 circleci-agent step halt
                 echo 'VELO_CLIENT_VERSION PARAM NOT SUPPLIED ... HALT BUILD'
             fi
       - checkout
-      - run: 
+      - run:
           name: Configure .env variables
-          command: | 
+          command: |
             make clone=1 key=${VELO_APIKEY} secret=${VELO_APISECRET} payor=${VELO_PAYORID} env
-      - run: 
+      - run:
           name: Init Docker Network
-          command: | 
+          command: |
             make network
-      - run: 
+      - run:
           name: Remove any existing db & redis container
-          command: | 
+          command: |
             docker rm /db
             docker rm /redis
-      - run: 
+      - run:
           name: Adjust the client dependency version
-          command: | 
+          command: |
             make version=${VELO_CLIENT_VERSION} setdep
-      - run: 
+      - run:
           name: Spin up the app
-          command: | 
+          command: |
             make up
-      - run: 
+      - run:
           name: Run E2E Tests
-          command: | 
+          command: |
             echo "Once up we should run tests"
-      - run: 
+      - run:
           name: Spin down the app
-          command: | 
+          command: |
             make down
-      - run: 
+      - run:
           name: Destroy the image
-          command: | 
+          command: |
             make destroy
 
 workflows:
