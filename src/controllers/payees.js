@@ -6,28 +6,29 @@ const payeeModel = require('../models/payee');
 
 /* GET payees list. */
 router.get('/', async function(req, res, next) {
-  // let defaultClient = VeloPayments.ApiClient.instance;
-  // let OAuth2 = defaultClient.authentications['OAuth2'];
-  // OAuth2.accessToken = await velo.getAccessToken();
+  let defaultClient = VeloPayments.ApiClient.instance;
+  let OAuth2 = defaultClient.authentications['OAuth2'];
+  OAuth2.accessToken = await velo.getAccessToken();
 
-  // let apiInstance = new VeloPayments.PayeesApi();
-  // let payorId = process.env.VELO_API_PAYORID;
-  // let opts = {
-  //   'pageNumber': 1,
-  //   'pageSize': 100,
-  //   'sort': 'displayName:desc'
-  // };
-  // apiInstance.listPayees(payorId, opts, (error, data, response) => {
-  //   if (error) {
-  //     console.error(error);
-  //   } else {
-  //     res.json(response.body);
-  //   }
-  // });
-  let page = (req.query.page !== undefined) ? parseInt(req.query.page): 1;
-  let model = new payeeModel();
-  let payees = await model.list(page);
-  res.json(payees);
+  let apiInstance = new VeloPayments.PayeesApi();
+  let payorId = process.env.VELO_API_PAYORID;
+  let opts = {
+    'pageNumber': 1,
+    'pageSize': 100,
+    'sort': 'displayName:desc'
+  };
+  apiInstance.listPayees(payorId, opts, (error, data, response) => {
+    if (error) {
+      console.error(error);
+    } else {
+      res.json(response.body);
+    }
+  });
+  // TODO: finish support for sync sidecar
+  // let page = (req.query.page !== undefined) ? parseInt(req.query.page): 1;
+  // let model = new payeeModel();
+  // let payees = await model.list(page);
+  // res.json(payees);
 });
 
 /* POST create payees. */
