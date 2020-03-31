@@ -14,20 +14,6 @@ services:
     networks:
       - payornetwork
 
-  dev:
-    container_name: payor-example-node
-    build: .
-    command: sh
-    ports:
-      - "4567:4567"
-    volumes:
-      - ./src:/opt/payor-example-node
-    depends_on:
-      - db
-      - redis
-    networks:
-      - payornetwork
-
   db:
     image: postgres:9.6
     container_name: db
