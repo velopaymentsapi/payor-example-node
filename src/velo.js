@@ -9,7 +9,7 @@ bluebird.promisifyAll(redis.Multi.prototype);
 class Velo {
     constructor(){
         this.refreshBefore = 300; // 5 mins
-        if (!process.env.SYNC_SIDECAR) {
+        if (process.env.SYNC_SIDECAR === "false") {
             console.log('sync sidecar disabled ... oauth managed locally');
             console.log("calling velo oauth client cred grant to get access token");
             this.requestAccessToken();
@@ -37,7 +37,7 @@ class Velo {
         });
     }
     checkAccessTokenExpiration(){
-        if (!process.env.SYNC_SIDECAR) {
+        if (process.env.SYNC_SIDECAR === "false") {
             console.log("check if access token is going to expire soon ... if so ... grab new one");
             if(moment().unix() >= this.getAccessTokenExpiration()) {
                 this.requestAccessToken()
@@ -50,7 +50,7 @@ class Velo {
         process.env.VELO_API_ACCESSTOKENEXPIRATION = ((moment().unix() + ttl) - this.refreshBefore);
     }
     async getAccessToken() {
-        if (!process.env.SYNC_SIDECAR) {
+        if (process.env.SYNC_SIDECAR === "false") {
             return process.env.VELO_API_ACCESSTOKEN;
         } else {
             let client = redis.createClient("redis://redis:6379", {detect_buffers: true});
@@ -60,8 +60,6 @@ class Velo {
     getAccessTokenExpiration() {
         return parseInt(process.env.VELO_API_ACCESSTOKENEXPIRATION,10);
     }
-  }
+}
   
-  module.exports = new Velo();
-
-  // '{"error":"invalid_token","error_description":"2a54cfa7-663d-4f21-9f08-f63dc3345322"}',
+module.exports = new Velo();

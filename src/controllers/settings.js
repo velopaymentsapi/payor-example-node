@@ -12,7 +12,7 @@ router.get('/', async function(req, res, next) {
   let apiInstance = new VeloPayments.PayorsApi();
   let payorId = process.env.VELO_API_PAYORID;
   
-  apiInstance.getPayorById(payorId, (error, data, response) => {
+  apiInstance.getPayorByIdV2(payorId, (error, data, response) => {
     if (error) {
       console.error(error);
     } else {
@@ -29,7 +29,7 @@ router.get('/accounts', async function(req, res, next) {
 
   let apiInstance = new VeloPayments.FundingManagerApi();
   let opts = {'payorId': process.env.VELO_API_PAYORID};
-  apiInstance.getSourceAccounts(opts, (error, data, response) => {
+  apiInstance.getSourceAccountsV2(opts, (error, data, response) => {
     if (error) {
       console.error(error);
     } else {
