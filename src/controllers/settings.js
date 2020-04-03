@@ -46,7 +46,7 @@ router.post('/fundings', async function(req, res, next) {
   
   let apiInstance = new VeloPayments.FundingManagerApi();
   let sourceAccountId = req.body.source_account;
-  let fundingRequest = new VeloPayments.FundingRequest();
+  let fundingRequest = new VeloPayments.FundingRequestV1();
   fundingRequest.amount = req.body.amount;
   apiInstance.createAchFundingRequest(sourceAccountId, fundingRequest, (error, data, response) => {
     if (error) {
